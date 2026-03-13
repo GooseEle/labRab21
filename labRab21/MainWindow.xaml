@@ -1,0 +1,88 @@
+﻿<Window x:Class="labRab21.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:labRab21"
+        Title="Паника-а-а" Height="450" Width="600">
+    <Window.Resources>
+        <local:StatusToColorConverter x:Key="StatusToColorConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Column="0" Header="Дисциплины" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <ListView Grid.Row="0" ItemsSource="{Binding Disciplines}" SelectedItem="{Binding SelectedDiscipline}" Margin="0,0,0,10">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="2" Padding="5" Width="250">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="120"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <Border Grid.Column="1" Background="{Binding Status.Name, Converter={StaticResource StatusToColorConverter}}" Height="20" CornerRadius="2"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Изменить статус" Command="{Binding ChangeStatusCommand}" Margin="5" Width="110" Padding="5"/>
+                    <Button Content="Удалить" Command="{Binding DeleteCommand}" Margin="5" Width="80" Padding="5"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="0" Header="Фильтр" Margin="5">
+                <StackPanel Margin="5">
+                    <RadioButton Content="Все" IsChecked="{Binding IsFilterAll}" Margin="0,5"/>
+                    <RadioButton Content="Успешно сданные" IsChecked="{Binding IsFilterPassed}" Margin="0,5"/>
+                    <RadioButton Content="Не сданные дисциплины" IsChecked="{Binding IsFilterFailed}" Margin="0,5"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0" HorizontalAlignment="Center">
+                        <Button Content="Сохранить" Command="{Binding SaveCommand}" Margin="5" Width="80" Padding="5"/>
+                        <Button Content="Отобразить" Command="{Binding FilterCommand}" Margin="5" Width="80" Padding="5"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Grid.Row="1" Header="Добавить дисциплину" Margin="5">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Дисциплина" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NewDiscipline.Name, UpdateSourceTrigger=PropertyChanged}" Margin="5" Height="25"/>
+
+                    <TextBlock Text="Статус" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Statuses}" SelectedItem="{Binding NewDiscipline.Status}" DisplayMemberPath="Name" Margin="5" Height="25"/>
+
+                    <Button Content="Добавить" Command="{Binding AddCommand}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Width="80" Padding="5"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
